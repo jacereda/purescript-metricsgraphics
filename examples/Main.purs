@@ -12,7 +12,7 @@ import MetricsGraphics (MG, dataGraphic)
 import MetricsGraphics.Color (Color(..))
 import MetricsGraphics.Date (formatDate, yyyymmdd)
 import MetricsGraphics.Options (defaultOptions)
-import MetricsGraphics.Options.Helpers (Align(..), ChartType(..), Format(..), Func(..))
+import MetricsGraphics.Options.Helpers (Align(..), ChartType(..), Format(..), Func(..), Curve(..))
 
 main :: forall e. Eff (mg :: MG, console :: CONSOLE | e) Unit
 main = do
@@ -43,6 +43,7 @@ main = do
                   , data = factor 200000000.0 fakeusers
                   , xax_format = Just $ Func \x -> formatDate "YYYYMMDD" x
                   , yax_format = Just $ Func \y -> show (y * 100.0) <> "%"
+                  , interpolate = CurveLinearClosed
                   , animate_on_load = true
                   , format = Percentage
                   , target = "#ax-format"

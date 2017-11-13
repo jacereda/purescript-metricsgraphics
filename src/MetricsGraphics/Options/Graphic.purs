@@ -2,7 +2,7 @@ module MetricsGraphics.Options.Graphic where
 
 import Data.Maybe (Maybe)
 import MetricsGraphics.Color (Color)
-import MetricsGraphics.Options.Helpers (Align, ChartType, Format, Func)
+import MetricsGraphics.Options.Helpers (Align, ChartType, Format, Func, Curve)
 
 type Graphic x y r =
   ( aggregate_rollover :: Boolean -- links the lines in a multi-line graphic
@@ -38,9 +38,9 @@ type Graphic x y r =
   , x_rug :: Boolean -- show a rug plot along the x-axis
   , y_mouseover :: Maybe (Func {y :: y} String)
   , y_rug :: Boolean -- show a rug plot along the y-axis
+  , interpolate :: Curve -- the interpolation function to use for rendering lines
   | r )
 
-    --                 , interpolate :: d-- the interpolation function to use for rendering lines
     --                 , interpolate_tension - increase the tension to fix artifacts when your data is irregular
 --  , mouseover -- custom rollover function
     --mousemove - custom rollover function

@@ -4,7 +4,7 @@ import Prelude
 
 import Control.Monad.Except (runExcept, throwError)
 import Data.Either (Either(..))
-import Data.Foreign (ForeignError(..), fail, toForeign)
+import Data.Foreign (Foreign, ForeignError(..), fail, toForeign)
 import Partial.Unsafe (unsafeCrashWith)
 import Simple.JSON (class ReadForeign, class WriteForeign, read, write)
 
@@ -38,17 +38,20 @@ instance readAlign :: ReadForeign Align where
 data ChartType = Line
                | Histogram
                | Point
+               | Bar
                | MissingData
 instance writeChartType :: WriteForeign ChartType where
   writeImpl Line = write "line"
   writeImpl Histogram = write "histogram"
   writeImpl Point = write "point"
+  writeImpl Bar = write "bar"
   writeImpl MissingData = write "missing-data"  
 instance readChartType :: ReadForeign ChartType where
   readImpl f = case runExcept (read f) of
       Right "line" -> pure Line
       Right "histogram" -> pure Histogram
       Right "point" -> pure Point
+      Right "bar" -> pure Bar
       Right "missing-data" -> pure MissingData
       Right x -> fail $ ForeignError $ "Invalid ChartType: " <> x
       Left e -> throwError e
@@ -76,3 +79,75 @@ instance readScale :: ReadForeign Scale where
       Right "log" -> pure Log
       Right x -> fail $ ForeignError $ "Invalid scale: " <> x
       Left e -> throwError e
+
+
+foreign import curveEq :: Foreign -> Foreign -> Boolean
+
+foreign import curveCatmullRomAlpha0 :: Foreign
+foreign import curveLinearClosed :: Foreign
+foreign import curveStep :: Foreign
+foreign import curveStepBefore :: Foreign
+foreign import curveStepAfter :: Foreign
+foreign import curveBasis :: Foreign
+foreign import curveBasisOpen :: Foreign
+foreign import curveBasisClosed :: Foreign
+foreign import curveBundle :: Foreign
+foreign import curveCardinal :: Foreign
+foreign import curveCardinalOpen :: Foreign
+foreign import curveCardinalClosed :: Foreign
+foreign import curveMonotoneX :: Foreign
+foreign import curveCatmullRomClosed :: Foreign
+foreign import curveCatmullRomOpen :: Foreign
+
+data Curve = CurveCatmullRomAlpha0
+           | CurveLinearClosed
+           | CurveStep
+           | CurveStepBefore
+           | CurveStepAfter
+           | CurveBasis
+           | CurveBasisOpen
+           | CurveBasisClosed
+           | CurveBundle
+           | CurveCardinal
+           | CurveCardinalOpen
+           | CurveCardinalClosed
+           | CurveMonotoneX
+           | CurveCatmullRomClosed
+           | CurveCatmullRomOpen
+
+instance writeCurve :: WriteForeign Curve where
+  writeImpl c = case c of
+    CurveCatmullRomAlpha0 -> curveCatmullRomAlpha0
+    CurveLinearClosed -> curveLinearClosed
+    CurveStep -> curveStep
+    CurveStepBefore -> curveStepBefore
+    CurveStepAfter -> curveStepAfter
+    CurveBasis -> curveBasis
+    CurveBasisOpen -> curveBasisOpen
+    CurveBasisClosed -> curveBasisClosed
+    CurveBundle -> curveBundle
+    CurveCardinal -> curveCardinal
+    CurveCardinalOpen -> curveCardinalOpen
+    CurveCardinalClosed -> curveCardinalClosed
+    CurveMonotoneX -> curveMonotoneX
+    CurveCatmullRomClosed -> curveCatmullRomClosed
+    CurveCatmullRomOpen -> curveCatmullRomOpen
+
+instance readCurve :: ReadForeign Curve where
+  readImpl f =
+    if curveEq f curveCatmullRomAlpha0 then pure CurveCatmullRomAlpha0 else
+    if curveEq f curveLinearClosed then pure CurveLinearClosed else
+    if curveEq f curveStep then pure CurveStep else
+    if curveEq f curveStepBefore then pure CurveStepBefore else
+    if curveEq f curveStepAfter then pure CurveStepAfter else
+    if curveEq f curveBasis then pure CurveBasis else
+    if curveEq f curveBasisOpen then pure CurveBasisOpen else
+    if curveEq f curveBasisClosed then pure CurveBasisClosed else
+    if curveEq f curveBundle then pure CurveBundle else
+    if curveEq f curveCardinal then pure CurveCardinal else
+    if curveEq f curveCardinalOpen then pure CurveCardinalOpen else
+    if curveEq f curveCardinalClosed then pure CurveCardinalClosed else
+    if curveEq f curveMonotoneX then pure CurveMonotoneX else
+    if curveEq f curveCatmullRomClosed then pure CurveCatmullRomClosed else
+    if curveEq f curveCatmullRomOpen then pure CurveCatmullRomOpen else
+    fail $ ForeignError "Invalid interpolation"
