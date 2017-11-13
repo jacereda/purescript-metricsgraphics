@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "pulp browserify --no-psa -I examples --to dist/app.js"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "metrics-graphics": "^2.11.0"
+  }
+}
