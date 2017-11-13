@@ -64,3 +64,15 @@ instance readFormat :: ReadForeign Format where
       Right "percentage" -> pure Percentage
       Right x -> fail $ ForeignError $ "Invalid format: " <> x
       Left e -> throwError e
+
+data Scale = Linear
+           | Log
+instance writeScale :: WriteForeign Scale where
+  writeImpl Linear = write "linear"
+  writeImpl Log = write "log"
+instance readScale :: ReadForeign Scale where
+  readImpl f = case runExcept (read f) of
+      Right "linear" -> pure Linear
+      Right "log" -> pure Log
+      Right x -> fail $ ForeignError $ "Invalid scale: " <> x
+      Left e -> throwError e

@@ -1,7 +1,7 @@
 module MetricsGraphics.Options.Axes where
 
 import Data.Maybe (Maybe)
-import MetricsGraphics.Options.Helpers (Func)
+import MetricsGraphics.Options.Helpers (Func, Scale)
 
 type Axes x y r =
   ( axes_not_compact :: Boolean -- determines whether to draw compact or non-compact axes
@@ -19,7 +19,7 @@ type Axes x y r =
   , x_axis :: Boolean -- determines whether to display the x-axis
   , x_extended_ticks :: Boolean -- determines whether to extend the x-axis ticks across the chart
   , x_label :: String -- the label to show below the x-axis
-  , x_scale_type :: String -- the x-axis scale type
+  , x_scale_type :: Scale -- the x-axis scale type
   , xax_count :: Int -- the number of x-axis ticks
   , xax_format :: Maybe (Func x String) -- a function that formats the x-axis' labels
   , xax_tick_length :: Int -- the x-axis' tick length in pixels
@@ -27,7 +27,7 @@ type Axes x y r =
   , y_axis :: Boolean -- determines whether to display the y-axis
   , y_extended_ticks :: Boolean -- determines whether to extend the y-axis ticks across the chart
   , y_label :: String -- the label to show beside the y-axis
-  , y_scale_type :: String -- the y-axis scale type
+  , y_scale_type :: Scale -- the y-axis scale type
   , yax_count :: Int -- the number of y-axis ticks
   , yax_format :: Maybe (Func y String) -- a function that formats the y-axis' labels
   , yax_tick_length :: Int -- the y-axis' tick length in pixels
