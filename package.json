@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "pulp browserify --no-psa -I examples --to dist/app.js"
+    "build": "pulp browserify -O --no-psa -I examples --to dist/app.js"
   },
   "devDependencies": {},
   "dependencies": {
